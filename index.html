@@ -1,75 +1,75 @@
----
-
-### 📄 2. The Final `index.html`
-This version ensures the browser connects to `127.0.0.1` and forces the YouTube player to respond to "Drowsy" signals.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>SkillStream AI Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
-<body class="bg-slate-900 text-white font-sans">
-    <div class="max-w-6xl mx-auto p-8">
+<body class="bg-slate-900 text-white font-sans p-8">
+    <div class="max-w-6xl mx-auto">
         <header class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
-            <h1 class="text-3xl font-black tracking-tighter text-emerald-400">SKILLSTREAM <span class="text-white">AI</span></h1>
-            <div id="connection-status" class="px-4 py-2 bg-slate-800 rounded-full border border-slate-600">
-                <span class="text-xs uppercase tracking-widest text-slate-400">System Status:</span>
-                <span id="status-text" class="ml-2 font-bold text-emerald-400 uppercase">CONNECTED</span>
+            <h1 class="text-3xl font-black text-emerald-400">SKILLSTREAM AI</h1>
+            <div class="px-4 py-2 bg-slate-800 rounded-full border border-slate-600">
+                <span id="state-badge" class="font-bold text-emerald-400 text-xs uppercase tracking-widest">ACTIVE</span>
             </div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2">
                 <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-800">
-                    <div id="player"></div>
+                    <iframe id="video-frame" class="w-full h-full"
+                        src="https://www.youtube-nocookie.com/embed/z6hX_2_59kI?enablejsapi=1&autoplay=1&mute=1"
+                        frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <div class="space-y-6">
-                <div id="nudge-box" class="hidden p-6 bg-yellow-500/10 border-2 border-yellow-500/50 rounded-2xl">
-                    <h3 class="text-yellow-500 font-bold mb-2">💡 SKILLSTREAM INTERVENTION</h3>
-                    <p id="ai-content" class="text-sm text-yellow-100 leading-relaxed italic">Generating summary...</p>
-                </div>
+            <div id="nudge-box" class="hidden p-6 bg-yellow-500/10 border-2 border-yellow-500/50 rounded-2xl h-fit">
+                <h3 class="text-yellow-500 font-bold mb-2 uppercase text-xs">💡 AI Smart Recap</h3>
+                <p id="ai-content" class="text-sm text-yellow-100 italic leading-relaxed">Analyzing...</p>
+                <button onclick="resumeVideo()" class="mt-4 w-full py-3 bg-yellow-500 text-black font-bold rounded-xl text-xs uppercase hover:bg-yellow-400 shadow-lg transition-all">Resume Learning</button>
             </div>
         </div>
     </div>
 
     <script>
-        let player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '100%',
-                width: '100%',
-                videoId: '739S98m3p_o', // Default video: Dijkstra's
-                playerVars: { 'autoplay': 1, 'controls': 1 }
-            });
+        const videoFrame = document.getElementById('video-frame');
+        const badge = document.getElementById('state-badge');
+        const nudgeBox = document.getElementById('nudge-box');
+        let boredTimer = null, isIntervening = false;
+
+        function pauseVideo() {
+            videoFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        }
+        function playVideo() {
+            videoFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        }
+        function resumeVideo() {
+            playVideo();
+            nudgeBox.classList.add('hidden');
+            isIntervening = false;
         }
 
-        // WebSocket Connection
         const ws = new WebSocket("ws://127.0.0.1:8000/ws");
-
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            const statusText = document.getElementById('status-text');
-            const nudgeBox = document.getElementById('nudge-box');
-            const aiContent = document.getElementById('ai-content');
+            badge.innerText = data.status.toUpperCase();
 
-            statusText.innerText = data.status.toUpperCase();
-
-            if (data.status === "bored") {
-                statusText.className = "ml-2 font-bold text-yellow-400 uppercase";
-                nudgeBox.classList.remove('hidden');
-                aiContent.innerText = data.summary || "Focus lost! Here is a quick recap of the last concept...";
-            } else if (data.status === "drowsy") {
-                statusText.className = "ml-2 font-bold text-red-500 uppercase";
-                if (player && player.pauseVideo) player.pauseVideo(); // Force Pause
-            } else {
-                statusText.className = "ml-2 font-bold text-emerald-400 uppercase";
-                nudgeBox.classList.add('hidden');
+            if (data.status === "active") {
+                if (boredTimer) { clearTimeout(boredTimer); boredTimer = null; }
+                badge.className = "font-bold text-emerald-400 text-xs uppercase tracking-widest";
+                if (!isIntervening) { nudgeBox.classList.add('hidden'); }
+            } 
+            else if (data.status === "bored" && !isIntervening) {
+                badge.className = "font-bold text-yellow-500 text-xs uppercase tracking-widest";
+                if (!boredTimer) {
+                    boredTimer = setTimeout(() => {
+                        pauseVideo();
+                        nudgeBox.classList.remove('hidden');
+                        document.getElementById('ai-content').innerText = data.summary || "Recapping key concepts...";
+                        isIntervening = true;
+                        boredTimer = null;
+                    }, 30000); 
+                }
             }
         };
     </script>

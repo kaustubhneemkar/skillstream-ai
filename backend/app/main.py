@@ -1,41 +1,40 @@
-from fastapi import FastAPI, WebSocket
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from ai_services.summarizer import get_ai_intervention
 import json
-import uvicorn
-from ai_services.summarizer import generate_intervention_summary
 
 app = FastAPI()
 
-# Add CORS middleware to ensure browser access
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections = []
+    async def connect(self, ws):
+        await ws.accept()
+        self.active_connections.append(ws)
+    def disconnect(self, ws):
+        self.active_connections.remove(ws)
+    async def broadcast(self, msg):
+        for c in self.active_connections:
+            try: await c.send_text(msg)
+            except: pass
+
+manager = ConnectionManager()
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    # If you see this in Terminal, the browser IS connected
-    print("🚀 BROWSER TOTALLY CONNECTED") 
-    
+    await manager.connect(websocket)
     try:
         while True:
             data = await websocket.receive_text()
-            message = json.loads(data)
-            status = message.get("status")
-            print(f"📡 Received Signal: {status}")
-
-            if status == "bored":
-                message["summary"] = generate_intervention_summary("Dijkstra's Algorithm")
-                print("✅ Summary generated.")
+            msg = json.loads(data)
+            status = msg.get("status", "active")
             
-            # Send the JSON back to the browser
-            await websocket.send_text(json.dumps(message))
+            # Using stable ID: z6hX_2_59kI
+            summary = await get_ai_intervention("z6hX_2_59kI") if status == "bored" else None
             
-    except Exception as e:
-        print(f"📡 WebSocket Status: {e}")
+            await manager.broadcast(json.dumps({"status": status, "summary": summary}))
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
