@@ -1,0 +1,8 @@
+{
+  "name": "SkillStream",
+  "description": "A dynamic workforce upskilling engine that adapts learning paths based on employee performance and preferences.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
