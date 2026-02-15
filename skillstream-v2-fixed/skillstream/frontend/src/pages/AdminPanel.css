@@ -1,0 +1,118 @@
+/* Admin Panel Styles */
+
+.admin-panel {
+  min-height: 100vh;
+}
+
+.admin-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.create-course-form {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.create-course-form h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.video-playlist-section {
+  margin: var(--spacing-2xl) 0;
+  padding: var(--spacing-xl);
+  background: var(--color-gray-900);
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--border-radius-lg);
+}
+
+.video-playlist-section h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.video-form-group {
+  background: var(--color-gray-800);
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.video-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.video-form-header h5 {
+  font-size: 0.875rem;
+  margin: 0;
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead tr {
+  border-bottom: 2px solid var(--color-gray-700);
+}
+
+.admin-table th {
+  text-align: left;
+  padding: var(--spacing-lg);
+  color: var(--color-gray-400);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid var(--color-gray-800);
+  transition: background var(--transition-base);
+}
+
+.admin-table tbody tr:hover {
+  background: var(--color-gray-900);
+}
+
+.admin-table td {
+  padding: var(--spacing-lg);
+  color: var(--color-white);
+}
+
+.admin-table .text-muted {
+  color: var(--color-gray-400);
+}
+
+@media (max-width: 768px) {
+  .admin-actions {
+    flex-direction: column;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
