@@ -16,6 +16,8 @@ SkillStream is a next-generation adaptive learning platform designed for corpora
 ✅ **Performance Analytics** - Detailed insights into strengths, gaps, and progress  
 ✅ **Rich Asset Catalog** - Video, text, and interactive learning modules  
 ✅ **Admin Dashboard** - Platform management and employee analytics  
+✅ **Real-Time Bio-Feedback (Beta)** - Computer Vision-based engagement tracking to detect "Passive Presence"
+✅ **AI Smart-Recap** - Instant, context-aware summaries triggered when focus is lost, powered by Gemini 1.5 Flash
 
 ---
 
@@ -46,6 +48,16 @@ skillstream/
 │   └── package.json
 │
 └── README.md           # This file
+
+module-2 (drowsiness detection)
+skillstream/
+├── backend/               # Node.js + Express API
+├── frontend/              # React application
+├── cv-sensor/             # AI Engagement Core (Python + OpenCV)
+│   ├── cv_tracker.py      # Face & Focus tracking script
+│   ├── utils/             # Frame processing helpers
+│   └── requirements.txt   # Python dependencies
+└── README.md
 ```
 
 ---
@@ -56,6 +68,7 @@ skillstream/
 
 - **Node.js** (v16 or higher)
 - **npm** or **yarn**
+- **Python** 3.10+
 
 ### Backend Setup
 
@@ -65,6 +78,12 @@ npm install
 npm start
 ```
 
+### CV Sensor setup
+```
+cd cv-sensor
+pip install -r requirements.txt
+python cv_tracker.py
+```
 Server runs on: **http://localhost:5000**
 
 The database will automatically seed with sample data on first run.
@@ -159,6 +178,12 @@ Platform management tools:
 - **Database management**: Reseed with sample data
 - **Asset management**: Full CRUD operations
 
+### 6. AI Engagement & Bio-Feedback Core
+A proactive monitoring layer that bridges the gap between physical presence and mental engagement:
+Edge-Processed Vision: Uses OpenCV with Haar Cascade Classifiers to track learner gaze and focus states locally on the device (Privacy-First).
+WebSocket State Syncing: Maintains a <50ms latency connection between the Python sensor and the React dashboard to trigger instant pauses.
+Gemini-Powered Interventions: When "Boredom" (distraction) is detected, the system fetches the current video transcript and uses Gemini 1.5 Flash to generate a one-sentence "Smart Recap" to catch the user up.
+
 ---
 
 ## 🧠 How the Adaptive Engine Works
@@ -192,6 +217,13 @@ After every 5 completed modules:
   - Insert easier/harder content
   - Remove redundant modules
   - Add remedial materials
+
+### Real-Time Engagement Logic (Module 2)
+The platform monitors engagement metrics beyond just quiz scores:
+Drowsiness/Boredom detection: If the user looks away or shows signs of fatigue for >3 seconds:
+**State: BORED**
+**Action: PAUSE_VIDEO + REQUEST_AI_SUMMARY**
+Context Re-Entry: The system presents a modal with a summary of the exact section the user missed, ensuring no "Context Gap" occurs during upskilling.
 
 ---
 
@@ -257,6 +289,16 @@ GET    /api/admin/employees                - All employees with analytics
 GET    /api/admin/employees/:id/details    - Detailed employee info
 POST   /api/admin/seed                     - Reseed database
 GET    /api/admin/assets/analytics         - Asset usage analytics
+```
+
+### Engagement(WebSocket)
+```
+WS    /ws/engagement      - Bi-directional focus state streaming
+```
+
+### AI Services
+```
+POST  /api/ai/recap       - Generate context-aware summary from video transcript
 ```
 
 ---
