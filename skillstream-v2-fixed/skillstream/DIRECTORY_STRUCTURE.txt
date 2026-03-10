@@ -1,0 +1,181 @@
+SkillStream - Complete Directory Structure
+==========================================
+
+skillstream/
+│
+├── 📄 README.md                   # Complete project documentation
+├── 📄 QUICKSTART.md               # 5-minute setup guide
+├── 📄 ARCHITECTURE.md             # Technical architecture details
+├── 📄 PROJECT_SUMMARY.md          # Feature highlights & overview
+├── 📄 DIRECTORY_STRUCTURE.txt     # This file
+│
+├── 📁 backend/                    # Node.js + Express API
+│   ├── 📄 package.json            # Backend dependencies
+│   ├── 📄 server.js               # Express server setup
+│   ├── 📄 init.js                 # Initialization script
+│   ├── 📄 README.md               # Backend documentation
+│   │
+│   ├── 📁 routes/                 # API route handlers
+│   │   ├── 📄 auth.js             # Authentication endpoints
+│   │   ├── 📄 assets.js           # Asset management
+│   │   ├── 📄 employees.js        # Employee profiles & progress
+│   │   ├── 📄 learningPaths.js    # Adaptive path generation
+│   │   └── 📄 admin.js            # Admin panel endpoints
+│   │
+│   ├── 📁 middleware/             # Express middleware
+│   │   └── 📄 auth.js             # JWT authentication
+│   │
+│   ├── 📁 utils/                  # Utility functions
+│   │   ├── 📄 database.js         # In-memory database
+│   │   └── 📄 adaptiveEngine.js   # 🧠 Adaptive learning algorithm
+│   │
+│   ├── 📁 data/                   # Sample data
+│   │   └── 📄 seed.js             # Sample employees & assets
+│   │
+│   └── 📁 models/                 # (Future: Database schemas)
+│
+└── 📁 frontend/                   # React application
+    ├── 📄 package.json            # Frontend dependencies
+    │
+    ├── 📁 public/                 # Static assets
+    │   └── 📄 index.html          # HTML template
+    │
+    └── 📁 src/                    # React source code
+        ├── 📄 index.js            # Entry point
+        ├── 📄 App.js              # Main app component & routing
+        │
+        ├── 📁 pages/              # Page components
+        │   ├── 📄 LandingPage.js       # Marketing/home page
+        │   ├── 📄 LandingPage.css      # Landing page styles
+        │   ├── 📄 LoginPage.js         # Login form
+        │   ├── 📄 SignupPage.js        # Signup form
+        │   ├── 📄 AuthPages.css        # Auth page styles
+        │   ├── 📄 Dashboard.js         # 📊 Main employee dashboard
+        │   ├── 📄 Dashboard.css        # Dashboard styles
+        │   ├── 📄 AssetCatalog.js      # Browse all assets
+        │   ├── 📄 LearningModule.js    # Individual module viewer
+        │   └── 📄 AdminPanel.js        # Admin management interface
+        │
+        ├── 📁 components/         # Reusable components
+        │   └── (Ready for expansion)
+        │
+        ├── 📁 services/           # API communication
+        │   └── 📄 api.js          # Axios-based API service
+        │
+        ├── 📁 context/            # React context
+        │   └── 📄 AuthContext.js  # Authentication state
+        │
+        ├── 📁 styles/             # Global styles
+        │   └── 📄 App.css         # 🎨 Main stylesheet (Industrial-Modern)
+        │
+        └── 📁 utils/              # Frontend utilities
+            └── (Ready for expansion)
+
+
+KEY FILES TO EXPLORE
+====================
+
+🧠 Adaptive Learning Engine:
+   backend/utils/adaptiveEngine.js
+   - Path generation algorithm
+   - Scoring & ranking logic
+   - Real-time adaptation
+
+📊 Main Dashboard:
+   frontend/src/pages/Dashboard.js
+   - Employee view
+   - Progress tracking
+   - Performance analytics
+
+🎨 Design System:
+   frontend/src/styles/App.css
+   - CSS variables
+   - Component styles
+   - Animations
+
+🔐 Authentication:
+   backend/middleware/auth.js
+   frontend/src/context/AuthContext.js
+   - JWT implementation
+   - State management
+
+📚 Sample Data:
+   backend/data/seed.js
+   - 12 learning assets
+   - 5 employee profiles
+   - Demo credentials
+
+
+QUICK START
+===========
+
+1. Backend:
+   cd backend
+   npm install
+   npm start
+   → http://localhost:5000
+
+2. Frontend:
+   cd frontend
+   npm install
+   npm start
+   → http://localhost:3000
+
+3. Login:
+   admin@skillstream.com / admin123
+
+
+FILE COUNTS
+===========
+
+Backend:
+- Routes: 5 files
+- Utilities: 2 files
+- Middleware: 1 file
+- Data: 1 file
+- Config: 3 files
+Total: 12 backend files
+
+Frontend:
+- Pages: 9 files
+- Services: 1 file
+- Context: 1 file
+- Styles: 4 files
+- Config: 2 files
+Total: 17 frontend files
+
+Documentation: 4 files
+Total Project Files: 33+
+
+
+TECHNOLOGIES USED
+=================
+
+Backend:
+✅ Node.js - Runtime
+✅ Express.js - Web framework
+✅ jsonwebtoken - JWT authentication
+✅ bcryptjs - Password hashing
+✅ uuid - Unique ID generation
+
+Frontend:
+✅ React 18 - UI framework
+✅ React Router v6 - Routing
+✅ Axios - HTTP client
+✅ Recharts - Data visualization
+✅ Lucide React - Icons
+
+Design:
+✅ Custom CSS - No frameworks
+✅ CSS Variables - Theming
+✅ Google Fonts - Typography
+✅ Industrial-Modern aesthetic
+
+
+LEARN MORE
+==========
+
+📖 Complete Guide: README.md
+⚡ Quick Setup: QUICKSTART.md
+🏗️ Architecture: ARCHITECTURE.md
+✨ Features: PROJECT_SUMMARY.md
